@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Entries</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('partials/header') %>
+    <div class="container">
+        <h1>Entries</h1>
+        <a href="/form" class="btn">Create New Entry</a>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Notes</th>
+                    <th>Timestamp</th>
+                    <th>Images</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% entries.forEach(entry => { %>
+                    <tr>
+                        <td><%= entry.title %></td>
+                        <td><%= entry.notes %></td>
+                        <td><%= new Date(entry.timestamp).toLocaleString() %></td>
+                        <td>
+                            <% if (entry.images && entry.images.length) { %>
+                                <% entry.images.forEach(image => { %>
+                                    <img src="<%= image %>" alt="Entry Image" class="entry-image">
+                                <% }) %>
+                            <% } else { %>
+                                No images
+                            <% } %>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
+    </div>
+    <%- include('partials/footer') %>
+</body>
+</html>
