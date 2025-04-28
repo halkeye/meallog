@@ -2,9 +2,12 @@ import { Request, Response } from "express";
 import Entry from "../models/Entry";
 
 class EntryController {
-  async renderForm(/*_: Request, _: Response*/) {
-    throw new Error("Method not implemented.");
+  async renderForm(_: Request, res: Response) {
+    res.render("form", {
+      title: "Create Entry",
+    });
   }
+
   async createEntry(req: Request, res: Response) {
     try {
       const { title, notes, timestamp } = req.body;
@@ -39,4 +42,3 @@ class EntryController {
 }
 
 export default EntryController;
-
