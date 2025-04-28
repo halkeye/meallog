@@ -6,7 +6,7 @@ const router = Router();
 const entryController = new EntryController();
 const indexController = new IndexController();
 
-router.get('/', indexController.renderHomePage);
+router.get('/', indexController.home);
 router.get('/entries', entryController.listEntries);
 router.get('/entries/new', entryController.renderForm);
 router.post('/entries', entryController.createEntry);

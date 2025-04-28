@@ -4,7 +4,7 @@ import session from 'express-session';
 import path from 'path';
 import { uploadFileMiddleware } from './middleware/uploadMiddleware';
 import indexRoutes from './routes/index';
-import db from './config/database';
+import config from './config';
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -15,7 +15,7 @@ app.set('views', path.join(__dirname, 'views'));
 // Middleware
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: true }));
+app.use(session({ secret: config.sessionKey, resave: false, saveUninitialized: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(uploadFileMiddleware);
 
@@ -23,7 +23,7 @@ app.use(uploadFileMiddleware);
 app.use('/', indexRoutes);
 
 // Sync database
-db.sync()
+config.db.sync()
     .then(() => {
         console.log('Database synchronized');
     })

@@ -1,8 +1,9 @@
 import { Model, DataTypes } from 'sequelize';
-import sequelize from '../config/database';
+import config from '../config';
+import User from './User';
 
 class Entry extends Model {
-    public id!: number;
+    declare id: number;
     public title!: string;
     public notes!: string;
     public timestamp!: Date;
@@ -37,9 +38,12 @@ Entry.init(
         },
     },
     {
-        sequelize,
+        sequelize: config.db,
         tableName: 'entries',
     }
 );
+
+User.hasMany(Entry);
+Entry.belongsTo(User);
 
 export default Entry;

@@ -1,12 +1,15 @@
 import { Request, Response } from "express";
-import { Entry } from "../models/Entry";
-import { S3 } from "../config/s3";
+import Entry from "../models/Entry";
 
 class EntryController {
+    renderForm(arg0: string, renderForm: any) {
+        throw new Error('Method not implemented.');
+    }
     async createEntry(req: Request, res: Response) {
         try {
             const { title, notes, timestamp } = req.body;
-            const imageUrls = req.files.map((file: Express.Multer.File) => file.location); // Assuming req.files contains the uploaded files
+            // const imageUrls = req.files.map((file: Express.Multer.File) => file.location); // Assuming req.files contains the uploaded files
+            const imageUrls = [] as string[]; // Placeholder for image URLs
 
             const newEntry = await Entry.create({
                 title,
@@ -14,6 +17,8 @@ class EntryController {
                 timestamp,
                 images: imageUrls,
             });
+
+            await newEntry.save();
 
             res.redirect("/entries");
         } catch (error) {
@@ -33,4 +38,4 @@ class EntryController {
     }
 }
 
-export default new EntryController();
+export default EntryController;
