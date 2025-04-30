@@ -13,7 +13,7 @@ class Config {
   get db(): Sequelize {
     if (!this._db) {
       this._db = new Sequelize(process.env.DB_URL || "sqlite://db.sqlite", {
-        logging: false, // Set to console.log to see SQL queries
+        logging: true, // Set to console.log to see SQL queries
       });
     }
     return this._db;
@@ -43,4 +43,3 @@ class Config {
 }
 
 export default new Config();
-

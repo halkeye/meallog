@@ -18,9 +18,9 @@
                     <td><%= entry.notes %></td>
                     <td><%= new Date(entry.timestamp).toLocaleString() %></td>
                     <td>
-                        <% if (entry.images && entry.images.length) { %>
+                        <% if (entry.images) { %>
                             <% entry.images.forEach(image => { %>
-                                <img src="<%= image %>" alt="Entry Image" class="entry-image">
+                                <img src="<%= image.image %>" alt="Entry Image" class="entry-image">
                             <% }) %>
                         <% } else { %>
                             No images

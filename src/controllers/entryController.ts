@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import Entry from "../models/Entry";
+import EntryImage from "../models/EntryImage";
 
 class EntryController {
   async renderForm(_: Request, res: Response) {
@@ -11,17 +12,28 @@ class EntryController {
   async createEntry(req: Request, res: Response) {
     try {
       const { title, notes, timestamp } = req.body;
-      // const imageUrls = req.files.map((file: Express.Multer.File) => file.location); // Assuming req.files contains the uploaded files
-      const imageUrls = [] as string[]; // Placeholder for image URLs
 
-      const newEntry = await Entry.create({
-        title,
-        notes,
-        timestamp,
-        images: imageUrls,
-      });
+      const newEntry = await Entry.create(
+        {
+          title,
+          notes,
+          timestamp,
+        },
+        {
+          include: [
+            {
+              model: EntryImage,
+              as: "images",
+            },
+          ],
+        },
+      );
 
-      await newEntry.save();
+      for (const file of req.files as Express.Multer.File[]) {
+        await newEntry.createImage({
+          image: file.path.replace(/^public\//, ""),
+        });
+      }
 
       res.redirect("/entries");
     } catch (error) {
@@ -30,9 +42,16 @@ class EntryController {
     }
   }
 
-  async listEntries(req: Request, res: Response) {
+  async listEntries(_: Request, res: Response) {
     try {
-      const entries = await Entry.findAll();
+      const entries = await Entry.findAll({
+        include: [
+          {
+            model: EntryImage,
+            as: "images",
+          },
+        ],
+      });
       res.render("entries", { entries });
     } catch (error) {
       console.error("Error fetching entries:", error);

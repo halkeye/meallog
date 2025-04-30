@@ -1,16 +1,31 @@
-import { Model, DataTypes } from "sequelize";
+import {
+  Model,
+  DataTypes,
+  InferAttributes,
+  InferCreationAttributes,
+  Association,
+  CreationOptional,
+  NonAttribute,
+  HasManyCreateAssociationMixin,
+} from "sequelize";
 import config from "../config";
-import User from "./User";
+import EntryImage from "./EntryImage";
 
-class Entry extends Model {
-  declare id: number;
-  public title!: string;
-  public notes!: string;
-  public timestamp!: Date;
-  public imageUrls!: string[];
+class Entry extends Model<
+  InferAttributes<Entry>,
+  InferCreationAttributes<Entry>
+> {
+  declare id: CreationOptional<number>;
+  declare title: string;
+  declare notes: string;
+  declare timestamp: Date | null | undefined;
 
-  public readonly createdAt!: Date;
-  public readonly updatedAt!: Date;
+  declare images?: NonAttribute<EntryImage[]>;
+  declare createImage: HasManyCreateAssociationMixin<EntryImage, "entryId">;
+
+  declare static associations: {
+    images: Association<Entry, EntryImage>;
+  };
 }
 
 Entry.init(
@@ -32,27 +47,13 @@ Entry.init(
       type: DataTypes.DATE,
       allowNull: false,
     },
-    imageUrls: {
-      type: DataTypes.JSON,
-      allowNull: true,
-    },
-    userId: {
-      type: DataTypes.INTEGER,
-      allowNull: true,
-    },
   },
   {
     sequelize: config.db,
-    tableName: "entries",
+    underscored: true,
   },
 );
 
-User.hasMany(Entry, {
-  foreignKey: "userId",
-});
-Entry.belongsTo(User, {
-  foreignKey: "userId",
-});
+Entry.hasMany(EntryImage, { as: "images", foreignKey: { name: "entryId" } });
 
 export default Entry;
-
