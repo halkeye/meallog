@@ -30,10 +30,19 @@ EntryImage.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    entryId: {
+      type: DataTypes.NUMBER,
+      allowNull: false,
+    },
   },
   {
     sequelize: config.db,
     underscored: true,
+    defaultScope: {
+      attributes: {
+        exclude: ["id", "createdAt", "updatedAt", "entryId", "entry_id"],
+      },
+    },
   },
 );
 

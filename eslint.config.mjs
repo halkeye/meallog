@@ -18,7 +18,7 @@ export default tseslint.config(
   tseslint.configs.strict,
   tseslint.configs.stylistic,
   {
-    files: ["src/public/**/*.js"],
+    files: ["src/public/**/*.js", "src/client/**/*.ts"],
     languageOptions: {
       globals: {
         ...globals.browser,

@@ -26,10 +26,26 @@ class Entry extends Model<
   declare static associations: {
     images: Association<Entry, EntryImage>;
   };
+
+  declare day: Date | null | undefined;
 }
 
 Entry.init(
   {
+    day: {
+      type: DataTypes.VIRTUAL,
+      get() {
+        if (!this.timestamp) {
+          return this.timestamp;
+        }
+        const copiedDate = new Date(this.timestamp.getTime());
+        copiedDate.setHours(0);
+        copiedDate.setMinutes(0);
+        copiedDate.setSeconds(0);
+        copiedDate.setMilliseconds(0);
+        return copiedDate;
+      },
+    },
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
@@ -51,9 +67,16 @@ Entry.init(
   {
     sequelize: config.db,
     underscored: true,
+    defaultScope: {
+      attributes: {
+        include: ["day"],
+        exclude: ["createdAt", "updatedAt"],
+      },
+      order: [["timestamp", "ASC"]],
+    },
   },
 );
 
-Entry.hasMany(EntryImage, { as: "images", foreignKey: { name: "entryId" } });
+Entry.hasMany(EntryImage, { as: "images", foreignKey: { name: "entry_id" } });
 
 export default Entry;

@@ -45,14 +45,65 @@ class EntryController {
   async listEntries(_: Request, res: Response) {
     try {
       const entries = await Entry.findAll({
-        include: [
-          {
-            model: EntryImage,
-            as: "images",
-          },
-        ],
+        include: ["images"],
+        offset: 0,
+        limit: 20,
       });
-      res.render("entries", { entries });
+      const imagesByEntryId = await EntryImage.findAll({
+        raw: true,
+        attributes: {
+          include: ["entryId"],
+        },
+        where: {
+          entryId: entries.map((e) => e.id),
+        },
+      }).then((images) => {
+        return images.reduce(function (acc, i) {
+          acc.set(i.entryId, [...(acc.get(i.entryId) || []), i.image]);
+          return acc;
+        }, new Map<number, string[]>());
+      });
+      res.render("entries", {
+        entries: entries.map((e) => {
+          const json = e.toJSON() as Record<string, unknown>;
+          json.images = imagesByEntryId.get(e.id) || [];
+          return json;
+        }),
+      });
+    } catch (error) {
+      console.error("Error fetching entries:", error);
+      res.status(500).send("Internal Server Error");
+    }
+  }
+
+  async listEntriesJson(_: Request, res: Response) {
+    try {
+      const entries = await Entry.findAll({
+        include: ["images"],
+        offset: 0,
+        limit: 20,
+      });
+      const imagesByEntryId = await EntryImage.findAll({
+        raw: true,
+        attributes: {
+          include: ["entryId"],
+        },
+        where: {
+          entryId: entries.map((e) => e.id),
+        },
+      }).then((images) => {
+        return images.reduce(function (acc, i) {
+          acc.set(i.entryId, [...(acc.get(i.entryId) || []), i.image]);
+          return acc;
+        }, new Map<number, string[]>());
+      });
+      res.json(
+        entries.map((e) => {
+          const json = e.toJSON() as Record<string, unknown>;
+          json.images = imagesByEntryId.get(e.id) || [];
+          return json;
+        }),
+      );
     } catch (error) {
       console.error("Error fetching entries:", error);
       res.status(500).send("Internal Server Error");

@@ -1,5 +1,6 @@
     <footer>
         <p>&copy; 2025 Your Company Name. All rights reserved.</p>
     </footer>
+  <%- assetsJS.map(asset => `<script type="module" src="${asset}"></script>`).join("") %>
 </body>
 </html>

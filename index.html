@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Meal Log</title>
+</head>
+
+<body>
+  <header>
+    <h1>Meal Log</h1>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/entries">Entries</a></li>
+        <li><a href="/entries/new">New Entry</a></li>
+      </ul>
+    </nav>
+  </header>
+  <div id="app"></div>
+  <g4v-food-images open="true"></g4v-food-images>
+  <template id="template_row">
+    <tr>
+      <td>asdasd</td>
+      <td>2025-05-01T08:44:03.000Z</td>
+      <td>
+        <div class="meal-image-container">
+          <div class="glide">
+            <div class="glide__track" data-glide-el="track">
+              <ul class="glide__slides">
+                <li class="glide__slide">
+                  <a data-fslightbox="" data-caption="asdasd" href="undefined">
+                    <img src="undefined">
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <div class="glide__arrows" data-glide-el="controls">
+              <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+              <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+            </div>
+            <div class="glide__bullets" data-glide-el="controls[nav]">
+            </div>
+          </div>
+
+        </div>
+      </td>
+    </tr>
+  </template>
+  <script type="module" src="/src/client/main.ts"></script>
+</body>
+
+</html>

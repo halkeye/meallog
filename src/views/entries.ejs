@@ -18,13 +18,32 @@
                     <td><%= entry.notes %></td>
                     <td><%= new Date(entry.timestamp).toLocaleString() %></td>
                     <td>
+                      <div class="meal-image-container">
                         <% if (entry.images) { %>
-                            <% entry.images.forEach(image => { %>
-                                <img src="<%= image.image %>" alt="Entry Image" class="entry-image">
-                            <% }) %>
+                        <div class="glide">
+                          <div class="glide__track" data-glide-el="track">
+                            <ul class="glide__slides">
+                              <% entry.images.forEach(image => { %>
+                              <li class="glide__slide">
+                                <a data-fslightbox="" data-caption="<%= entry.title %>" href="<%= image %>">
+                                  <img src="<%= image %>" alt="<%= entry.title %>" class="entry-image">
+                                </a>
+                                </li>
+                              <% }) %>
+                            </ul>
+                          </div>
+                          <div class="glide__arrows" data-glide-el="controls">
+                            <button class="glide__arrow glide__arrow--left" data-glide-dir="<">prev</button>
+                            <button class="glide__arrow glide__arrow--right" data-glide-dir=">">next</button>
+                          </div>
+                          <div class="glide__bullets" data-glide-el="controls[nav]">
+                            <%- entry.images.map((image, idx) => `<button class="glide__bullet" data-glide-dir="=${idx}"></button>`).join("") %>
+                          </div>
+                        </div>
                         <% } else { %>
                             No images
                         <% } %>
+                      </div>
                     </td>
                 </tr>
             <% }) %>
